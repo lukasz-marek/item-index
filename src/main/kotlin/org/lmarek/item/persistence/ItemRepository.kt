@@ -5,7 +5,7 @@ import kotlinx.coroutines.withContext
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.Statement
+import java.sql.Statement.RETURN_GENERATED_KEYS
 import java.util.concurrent.ExecutorService
 import javax.sql.DataSource
 
@@ -58,7 +58,7 @@ class ItemRepository(private val dataSource: DataSource, executorService: Execut
 
     private fun Connection.prepareInsertionStatement(entity: NewItemEntity): PreparedStatement {
         val insertion = this.prepareStatement(
-            "insert into $TABLE_NAME ($NAME_COLUMN, $DESCRIPTION_COLUMN) values (?, ?)", Statement.RETURN_GENERATED_KEYS
+            "insert into $TABLE_NAME ($NAME_COLUMN, $DESCRIPTION_COLUMN) values (?, ?)", RETURN_GENERATED_KEYS
         )
         insertion.setString(1, entity.name)
         insertion.setString(2, entity.description)
