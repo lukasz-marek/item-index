@@ -13,6 +13,7 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 import java.util.concurrent.Executors
 import javax.sql.DataSource
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
 internal class ItemRepositoryTest {
@@ -26,6 +27,11 @@ internal class ItemRepositoryTest {
         val dataSource = getDataSource(postgres)
         val pool = Executors.newSingleThreadExecutor()
         tested = ItemRepository(dataSource, pool)
+    }
+
+    @AfterTest
+    fun afterEach() {
+        postgres.stop()
     }
 
     @Test
