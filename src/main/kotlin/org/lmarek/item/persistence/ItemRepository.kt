@@ -31,9 +31,8 @@ class ItemRepository(private val dataSource: DataSource, executorService: Execut
     suspend fun getById(id: ItemId): ItemEntity? = withContext(repositoryDispatcher) {
         withConnection {
             val findById = it.prepareFindByIdQuery(id)
-
             val result = findById.executeQuery()
-            if (result.next()) result.toEntity() else null
+            result.nextEntity()
         }
     }
 
@@ -64,6 +63,9 @@ class ItemRepository(private val dataSource: DataSource, executorService: Execut
         insertion.setString(2, entity.description)
         return insertion
     }
+
+    private fun ResultSet.nextEntity(): ItemEntity? =
+        if (next()) toEntity() else null
 
     private fun ResultSet.toEntity(): ItemEntity {
         val id = ItemId(getLong(ID_INDEX))
