@@ -1,7 +1,8 @@
 package org.lmarek
 
-import io.ktor.application.*
-import org.lmarek.plugins.*
+import io.ktor.server.application.*
+import org.lmarek.plugins.configureRouting
+import org.lmarek.plugins.configureSerialization
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
@@ -10,5 +11,4 @@ fun main(args: Array<String>): Unit =
 fun Application.module() {
     configureRouting()
     configureSerialization()
-    configureMonitoring()
 }
