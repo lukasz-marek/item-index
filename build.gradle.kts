@@ -41,6 +41,7 @@ dependencies {
     testImplementation("io.strikt:strikt-core:0.34.0")
     testImplementation("org.testcontainers:testcontainers:1.16.3")
     testImplementation("org.testcontainers:postgresql:1.16.3")
+    testImplementation("io.mockk:mockk:1.12.3")
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {

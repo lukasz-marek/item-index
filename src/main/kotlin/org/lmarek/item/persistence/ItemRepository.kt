@@ -28,7 +28,7 @@ class ItemRepository(private val dataSource: DataSource, executorService: Execut
         }
     }
 
-    suspend fun getById(id: ItemId): ItemEntity? = withContext(repositoryDispatcher) {
+    suspend fun getById(id: Long): ItemEntity? = withContext(repositoryDispatcher) {
         withConnection {
             val findById = it.prepareFindByIdQuery(id)
             val result = findById.executeQuery()
@@ -37,15 +37,15 @@ class ItemRepository(private val dataSource: DataSource, executorService: Execut
     }
 
     private fun buildEntity(id: Long, data: NewItemEntity): ItemEntity = with(data) {
-        ItemEntity(id = ItemId(id), name = name, description = description)
+        ItemEntity(id = id, name = name, description = description)
     }
 
     private inline fun <T> withConnection(block: (Connection) -> T): T = dataSource.connection.use(block)
 
-    private fun Connection.prepareFindByIdQuery(id: ItemId): PreparedStatement {
+    private fun Connection.prepareFindByIdQuery(id: Long): PreparedStatement {
         val findById =
             prepareStatement("select $ID_COLUMN, $NAME_COLUMN, $DESCRIPTION_COLUMN from $TABLE_NAME where $ID_COLUMN = ?")
-        findById.setLong(1, id.value)
+        findById.setLong(1, id)
         return findById
     }
 
@@ -64,11 +64,10 @@ class ItemRepository(private val dataSource: DataSource, executorService: Execut
         return insertion
     }
 
-    private fun ResultSet.nextEntity(): ItemEntity? =
-        if (next()) toEntity() else null
+    private fun ResultSet.nextEntity(): ItemEntity? = if (next()) toEntity() else null
 
     private fun ResultSet.toEntity(): ItemEntity {
-        val id = ItemId(getLong(ID_INDEX))
+        val id = getLong(ID_INDEX)
         val name = getString(NAME_INDEX)
         val description = getString(DESCRIPTION_INDEX)
         return ItemEntity(id, name, description)

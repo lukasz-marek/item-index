@@ -16,7 +16,7 @@ import javax.sql.DataSource
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
-internal class ItemRepositoryTest {
+class ItemRepositoryTest {
     private val postgres =
         PostgreSQLContainer(DockerImageName.parse("postgres:alpine3.15")).withInitScript("sql/init_db.sql")
     private lateinit var tested: ItemRepository
@@ -83,7 +83,7 @@ internal class ItemRepositoryTest {
     fun `Returns null for non-existent item`(): Unit = runBlocking {
 
         // when
-        val missingItem = tested.getById(ItemId(1234))
+        val missingItem = tested.getById(1234)
 
         // then
         expectThat(missingItem).isNull()
