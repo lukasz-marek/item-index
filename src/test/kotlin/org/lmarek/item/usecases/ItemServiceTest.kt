@@ -6,9 +6,11 @@ import kotlinx.coroutines.runBlocking
 import org.lmarek.item.adapter.secondary.Item
 import org.lmarek.item.adapter.secondary.ItemId
 import org.lmarek.item.adapter.secondary.ItemStorageService
+import org.lmarek.item.adapter.secondary.NewItem
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import strikt.assertions.isNull
 import kotlin.test.Test
 
 
@@ -30,6 +32,37 @@ class ItemServiceTest {
             get { id }.isEqualTo(existingItemId)
             get { description }.isEqualTo("a description")
             get { name }.isEqualTo("a name")
+        }
+    }
+
+    @Test
+    fun `Returns null when item is missing`(): Unit = runBlocking {
+        // given
+        val missingItemId = ItemId(9871)
+        coEvery { itemStorage.getById(missingItemId) } returns null
+
+        // when
+        val missingItem = tested.getItemById(missingItemId)
+
+        // then
+        expectThat(missingItem).isNull()
+    }
+
+    @Test
+    fun `Saves a new item under a new id`(): Unit = runBlocking {
+        // given
+        val newId = ItemId(1234567)
+        val newItem = NewItem("new name", "new description")
+        coEvery { itemStorage.save(newItem) } returns Item(newId, "new name", "new description")
+
+        // when
+        val savedItem = tested.storeNewItem(newItem)
+
+        // then
+        expectThat(savedItem) {
+            get { id }.isEqualTo(newId)
+            get { name }.isEqualTo("new name")
+            get { description }.isEqualTo("new description")
         }
     }
 }
