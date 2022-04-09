@@ -4,7 +4,7 @@ import org.lmarek.item.persistence.ItemEntity
 import org.lmarek.item.persistence.ItemRepository
 import org.lmarek.item.persistence.NewItemEntity
 
-class SimpleItemService(private val itemRepository: ItemRepository) : ItemService {
+class SimpleItemStorageService(private val itemRepository: ItemRepository) : ItemStorageService {
     override suspend fun getById(itemId: ItemId): Item? {
         val retrievedItem = itemRepository.getById(itemId.value)
         return retrievedItem?.toItem()

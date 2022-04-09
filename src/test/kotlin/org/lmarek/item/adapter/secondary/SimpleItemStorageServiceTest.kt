@@ -13,9 +13,9 @@ import strikt.assertions.isNull
 import kotlin.test.Test
 
 
-class SimpleItemServiceTest {
+class SimpleItemStorageServiceTest {
     private val repository: ItemRepository = mockk()
-    private val tested = SimpleItemService(repository)
+    private val tested = SimpleItemStorageService(repository)
 
     @Test
     fun `Saves item when repository saves it`(): Unit = runBlocking {
