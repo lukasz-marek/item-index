@@ -3,6 +3,9 @@ package org.lmarek.item.adapter.secondary
 import org.lmarek.item.persistence.ItemEntity
 import org.lmarek.item.persistence.ItemRepository
 import org.lmarek.item.persistence.NewItemEntity
+import org.lmarek.item.usecases.Item
+import org.lmarek.item.usecases.ItemId
+import org.lmarek.item.usecases.NewItem
 
 class SimpleItemStorageService(private val itemRepository: ItemRepository) : ItemStorageService {
     override suspend fun getById(itemId: ItemId): Item? {

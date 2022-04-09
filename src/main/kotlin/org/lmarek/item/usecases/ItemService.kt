@@ -1,15 +1,16 @@
 package org.lmarek.item.usecases
 
-import org.lmarek.item.adapter.secondary.Item
-import org.lmarek.item.adapter.secondary.ItemId
 import org.lmarek.item.adapter.secondary.ItemStorageService
-import org.lmarek.item.adapter.secondary.NewItem
+
+
+data class NewItemCommand(val name: String, val description: String)
 
 class ItemService(private val itemStorageService: ItemStorageService) {
     suspend fun getItemById(itemId: ItemId): Item? =
         itemStorageService.getById(itemId)
 
-    suspend fun storeNewItem(newItem: NewItem): Item {
+    suspend fun storeNewItem(command: NewItemCommand): Item {
+        val newItem = NewItem(command.name, command.description)
         return itemStorageService.save(newItem)
     }
 }

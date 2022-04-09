@@ -3,10 +3,7 @@ package org.lmarek.item.usecases
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.lmarek.item.adapter.secondary.Item
-import org.lmarek.item.adapter.secondary.ItemId
 import org.lmarek.item.adapter.secondary.ItemStorageService
-import org.lmarek.item.adapter.secondary.NewItem
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
@@ -52,11 +49,15 @@ class ItemServiceTest {
     fun `Saves a new item under a new id`(): Unit = runBlocking {
         // given
         val newId = ItemId(1234567)
-        val newItem = NewItem("new name", "new description")
-        coEvery { itemStorage.save(newItem) } returns Item(newId, "new name", "new description")
+        val command = NewItemCommand("new name", "new description")
+        coEvery { itemStorage.save(NewItem("new name", "new description")) } returns Item(
+            newId,
+            "new name",
+            "new description"
+        )
 
         // when
-        val savedItem = tested.storeNewItem(newItem)
+        val savedItem = tested.storeNewItem(command)
 
         // then
         expectThat(savedItem) {

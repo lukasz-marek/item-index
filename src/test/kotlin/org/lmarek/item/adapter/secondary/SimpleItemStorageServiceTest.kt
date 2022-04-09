@@ -6,6 +6,8 @@ import kotlinx.coroutines.runBlocking
 import org.lmarek.item.persistence.ItemEntity
 import org.lmarek.item.persistence.ItemRepository
 import org.lmarek.item.persistence.NewItemEntity
+import org.lmarek.item.usecases.ItemId
+import org.lmarek.item.usecases.NewItem
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
